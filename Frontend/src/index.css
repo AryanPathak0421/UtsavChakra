@@ -1,0 +1,2240 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden; /* Prevent horizontal scroll globally */
+  max-width: 100vw; /* Ensure body doesn't exceed viewport width */
+}
+
+/* Allow vertical scrolling on all pages */
+html, body {
+  overflow-y: auto;
+}
+
+/* Ensure checkout page can scroll */
+.checkout-page {
+  overflow-y: auto !important;
+  height: auto !important;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* Responsive utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Smooth scrolling for horizontal scroll containers */
+.overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+  height: 6px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Safe area for mobile devices */
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.h-safe-area-inset-bottom {
+  height: env(safe-area-inset-bottom);
+}
+
+.pt-safe-area-top {
+  padding-top: env(safe-area-inset-top, 1rem);
+}
+
+/* Focus styles for accessibility */
+.focus-visible:focus-visible {
+  outline: 2px solid #ec4899;
+  outline-offset: 2px;
+}
+
+/* Improved touch targets for mobile */
+@media (max-width: 768px) {
+  button, .cursor-pointer {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Hide scrollbars for horizontal scroll containers */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Smart slider specific animations - NO AUTO-SLIDE, NO FLICKERING */
+.smart-slider-card {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.smart-slider-card:hover {
+  transform: translateY(-2px) translateZ(0);
+}
+
+.smart-slider-container {
+  touch-action: pan-y; /* Only allow vertical scrolling */
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Prevent any flickering or auto-animations */
+.smart-slider-container * {
+  animation-play-state: paused !important;
+}
+
+/* Manual arrow button styling */
+.slider-arrow-button {
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.slider-arrow-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.slider-arrow-button:active {
+  transform: scale(0.95);
+}
+
+/* Grid layout for cards - NO HORIZONTAL SCROLL */
+.vendor-cards-grid {
+  display: grid;
+  gap: 1rem;
+  overflow-x: hidden;
+}
+
+/* Mobile: 2 cards per row */
+@media (max-width: 767px) {
+  .vendor-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablet: 2 cards per row */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .vendor-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: 3 cards per row */
+@media (min-width: 1024px) {
+  .vendor-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Prevent text selection during swipe */
+.smart-slider-container * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Re-enable text selection for accessibility */
+.smart-slider-container *:focus {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Stable image rendering */
+.smart-slider-image {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Prevent card height variations due to content */
+.vendor-card-fixed-height {
+  height: 300px; /* Increased height for better spacing */
+  display: flex;
+  flex-direction: column;
+  overflow: visible; /* Ensure buttons are not cut */
+  position: relative; /* For consistent positioning */
+}
+
+.vendor-card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px;
+  padding-bottom: 12px; /* Extra bottom padding for button safety */
+  min-height: 0; /* Allow proper flexbox behavior */
+}
+
+.vendor-card-details {
+  flex: 1; /* Takes up available space */
+  min-height: 0; /* Allow shrinking */
+  overflow: hidden; /* Prevent content overflow */
+}
+
+.vendor-card-buttons {
+  margin-top: auto; /* Push to bottom */
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px; /* Safe area for buttons */
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0; /* Never shrink button area */
+  height: 44px; /* Fixed height for button area */
+}
+
+.vendor-card-button {
+  min-height: 36px;
+  height: 36px; /* Fixed height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  flex: 1; /* Take available width */
+}
+
+.vendor-card-whatsapp-button {
+  min-height: 36px;
+  height: 36px; /* Fixed height */
+  min-width: 36px;
+  width: 36px; /* Fixed width */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  flex-shrink: 0; /* Don't shrink */
+}
+
+/* Cart responsive improvements */
+.cart-item-mobile {
+  transition: all 0.2s ease-in-out;
+}
+
+.cart-item-mobile:hover {
+  transform: translateY(-1px);
+}
+
+/* Mobile-first button improvements */
+@media (max-width: 640px) {
+  .mobile-button {
+    min-height: 48px;
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+  
+  .mobile-button-large {
+    min-height: 56px;
+    font-size: 18px;
+    padding: 16px 20px;
+  }
+}
+
+/* Backdrop blur support */
+@supports (backdrop-filter: blur(10px)) {
+  .backdrop-blur {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not (backdrop-filter: blur(10px)) {
+  .backdrop-blur {
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 768px) {
+  /* Better text readability on mobile */
+  .mobile-text-base {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  /* Optimize card spacing on mobile */
+  .vendor-card-mobile {
+    margin-bottom: 1rem;
+  }
+  
+  /* Static mobile cards - no auto movement */
+  .mobile-static-card {
+    position: relative;
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  /* Ensure 2 cards per row on mobile */
+  .mobile-two-cards-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    overflow-x: hidden;
+  }
+  
+  /* Perfect button alignment on mobile */
+  .vendor-card-buttons {
+    margin-top: auto !important;
+    margin-bottom: 8px !important;
+    padding-top: 8px;
+  }
+  
+  .vendor-card-button {
+    min-height: 36px !important;
+    font-size: 12px;
+  }
+  
+  .vendor-card-whatsapp-button {
+    min-height: 36px !important;
+    min-width: 36px !important;
+  }
+}
+/* Responsive breakpoints for extra small screens */
+@media (min-width: 475px) {
+  .xs\:inline {
+    display: inline;
+  }
+  
+  .xs\:hidden {
+    display: none;
+  }
+  
+  .xs\:flex-row {
+    flex-direction: row;
+  }
+  
+  .xs\:items-center {
+    align-items: center;
+  }
+  
+  .xs\:justify-between {
+    justify-content: space-between;
+  }
+  
+  .xs\:justify-start {
+    justify-content: flex-start;
+  }
+  
+  .xs\:flex-none {
+    flex: none;
+  }
+  
+  .xs\:w-auto {
+    width: auto;
+  }
+}
+
+/* Enhanced mobile utilities */
+@media (max-width: 474px) {
+  .mobile-stack {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .mobile-full-width {
+    width: 100%;
+  }
+  
+  .mobile-text-center {
+    text-align: center;
+  }
+}
+
+/* Hamburger Menu Styles - FULL SCREEN */
+.hamburger-menu-panel {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 50 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+.hamburger-menu-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.hamburger-menu-item:hover {
+  transform: translateX(-2px);
+}
+
+.hamburger-menu-section {
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger-menu-section.expanded {
+  max-height: 500px;
+}
+
+.hamburger-menu-section.collapsed {
+  max-height: 0;
+  overflow: hidden;
+}
+
+/* Full screen menu positioning */
+.hamburger-menu-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Safe area adjustments for full screen menu */
+.safe-area-top {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+.safe-area-pb {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* Chat Styles */
+.chat-message-bubble {
+  max-width: 80%;
+  word-wrap: break-word;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.typing-indicator {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Chat input focus styles */
+.chat-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.2);
+}
+
+/* Smooth scrolling for chat messages */
+.chat-messages {
+  scroll-behavior: smooth;
+}
+
+/* Mobile-specific hamburger menu adjustments - FULL SCREEN */
+@media (max-width: 768px) {
+  .hamburger-menu-panel {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+  
+  .hamburger-menu-item {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .hamburger-menu-section-title {
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+  
+  /* Ensure no horizontal overflow */
+  .hamburger-menu-content {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}
+/* Enhanced Chat Styles */
+.chat-item:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+.typing-indicator .animate-bounce:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.typing-indicator .animate-bounce:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+.typing-indicator .animate-bounce:nth-child(3) {
+  animation-delay: 300ms;
+}
+
+/* Chat message animations */
+.chat-message-bubble {
+  animation: messageSlideIn 0.3s ease-out;
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Chat input auto-resize */
+.chat-input {
+  resize: none;
+  overflow-y: hidden;
+  min-height: 48px;
+  max-height: 120px;
+}
+
+/* Safe area support for chat */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Hamburger menu full screen */
+.hamburger-menu-panel {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+}
+
+.hamburger-menu-content {
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+/* Chat list improvements */
+.chat-item {
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.chat-item:hover {
+  transform: translateX(2px);
+}
+
+/* Message bubble improvements */
+.chat-message-bubble {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Online status pulse animation */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+.online-status {
+  animation: pulse 2s infinite;
+}
+/* ===== CHAT PAGE REDESIGN ===== */
+
+/* Chat Container - Full Screen Layout */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  overflow: hidden;
+  background-color: inherit;
+}
+
+/* Fixed Chat Header */
+.chat-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  border-bottom: 1px solid;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.chat-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.chat-back-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.chat-back-btn:hover {
+  transform: scale(1.05);
+}
+
+.chat-vendor-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.chat-avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.chat-online-indicator {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid;
+  animation: pulse 2s infinite;
+}
+
+.chat-vendor-info {
+  flex: 1;
+  min-width: 0;
+  margin-right: 12px;
+}
+
+.chat-vendor-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.chat-vendor-status {
+  font-size: 12px;
+  margin: 2px 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.chat-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chat-action-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Messages Container */
+.chat-messages-container {
+  flex: 1;
+  overflow: hidden;
+  margin-top: 64px; /* Chat header height */
+  margin-bottom: 80px; /* Input area height */
+  position: relative;
+}
+
+.chat-messages-list {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  /* Enable native scrolling for chat messages */
+  overscroll-behavior: contain;
+}
+
+/* Message Wrappers */
+.chat-message-wrapper {
+  margin-bottom: 16px;
+}
+
+.chat-timestamp-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.chat-timestamp {
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.chat-message-row {
+  display: flex;
+  width: 100%;
+}
+
+.chat-message-user {
+  justify-content: flex-end;
+}
+
+.chat-message-vendor {
+  justify-content: flex-start;
+}
+
+/* Message Bubbles */
+.chat-message-bubble {
+  max-width: 70%;
+  min-width: 60px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  animation: messageSlideIn 0.3s ease-out;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.chat-bubble-user {
+  border-bottom-right-radius: 4px;
+  margin-left: auto;
+}
+
+.chat-bubble-vendor {
+  border-bottom-left-radius: 4px;
+  margin-right: auto;
+}
+
+.chat-message-text {
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0 0 4px 0;
+  white-space: pre-wrap;
+}
+
+.chat-message-time {
+  font-size: 11px;
+  margin: 0;
+  text-align: right;
+  opacity: 0.8;
+}
+
+/* Typing Indicator */
+.chat-typing-indicator {
+  padding: 12px 16px;
+}
+
+.chat-typing-dots {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chat-typing-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite ease-in-out;
+}
+
+.chat-typing-dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.chat-typing-dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes typingBounce {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Fixed Input Area */
+.chat-input-container {
+  position: fixed;
+  bottom: 64px; /* Above bottom nav */
+  left: 0;
+  right: 0;
+  z-index: 60;
+  border-top: 1px solid;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.chat-input-wrapper {
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  width: 100%;
+}
+
+.chat-input-field {
+  flex: 1;
+  position: relative;
+}
+
+.chat-textarea {
+  width: 100%;
+  min-height: 44px;
+  max-height: 120px;
+  padding: 12px 16px;
+  border: 1px solid;
+  border-radius: 22px;
+  resize: none;
+  font-size: 14px;
+  line-height: 1.4;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat-textarea:focus {
+  outline: none;
+}
+
+.chat-textarea::placeholder {
+  opacity: 0.6;
+}
+
+.chat-send-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chat-send-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.chat-send-btn:disabled {
+  cursor: not-allowed;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+  .chat-header {
+    height: 60px;
+  }
+  
+  .chat-messages-container {
+    margin-top: 60px;
+    margin-bottom: 140px; /* More space for mobile keyboard */
+  }
+  
+  .chat-input-container {
+    bottom: 64px;
+    height: 76px;
+  }
+  
+  .chat-message-bubble {
+    max-width: 85%;
+    font-size: 14px;
+  }
+  
+  .chat-vendor-name {
+    font-size: 15px;
+  }
+  
+  .chat-vendor-status {
+    font-size: 11px;
+  }
+  
+  .chat-header-content {
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-header {
+    height: 56px;
+  }
+  
+  .chat-header-content {
+    padding: 6px 12px;
+    gap: 8px;
+  }
+  
+  .chat-messages-container {
+    margin-top: 56px;
+  }
+  
+  .chat-messages-list {
+    padding: 12px;
+  }
+  
+  .chat-input-wrapper {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  
+  .chat-input-container {
+    height: 72px;
+  }
+  
+  .chat-message-bubble {
+    max-width: 90%;
+    padding: 10px 14px;
+  }
+  
+  .chat-back-btn,
+  .chat-action-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .chat-avatar-img {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .chat-online-indicator {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .chat-vendor-name {
+    font-size: 14px;
+  }
+  
+  .chat-vendor-status {
+    font-size: 10px;
+  }
+}
+
+/* Smooth animations */
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Keyboard handling for mobile */
+@media (max-width: 768px) {
+  .chat-input-container {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .chat-messages-container {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .chat-message-bubble {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .chat-message-bubble {
+    animation: none;
+  }
+  
+  .chat-typing-dot {
+    animation: none;
+  }
+  
+  .chat-online-indicator {
+    animation: none;
+  }
+}
+/* Requirements page responsive styles */
+.requirements-service-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .requirements-service-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .requirements-service-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Planning details responsive styles */
+.planning-form-section {
+  margin-bottom: 2rem;
+}
+
+.planning-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .planning-grid-2 {
+    gap: 1rem;
+  }
+}
+
+/* Budget selector responsive */
+.budget-selector-button {
+  width: 100%;
+  padding: 0.75rem;
+  text-align: left;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+/* Service preference buttons */
+.service-preference-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.service-preference-button {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+/* Scroll-based prompt animation */
+.scroll-prompt-enter {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.scroll-prompt-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: all 0.3s ease-out;
+}
+
+.scroll-prompt-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.scroll-prompt-exit-active {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: all 0.3s ease-in;
+}
+/* Cart page specific styles */
+.cart-item-card {
+  transition: all 0.3s ease;
+}
+
+.cart-item-card:hover {
+  transform: translateY(-2px);
+}
+
+.cart-hero-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.cart-hero-image::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.1));
+  pointer-events: none;
+}
+
+.cart-remove-button {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.cart-summary-card {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.cart-addon-checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cart-addon-checkbox:checked {
+  background-color: var(--primary-500);
+  border-color: var(--primary-500);
+}
+
+.cart-addon-checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+/* Cart item animations */
+.cart-item-removing {
+  animation: cartItemRemove 0.3s ease-out forwards;
+}
+
+@keyframes cartItemRemove {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.95) translateX(-10px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateX(-100%);
+  }
+}
+
+/* Expandable add-ons animation */
+.cart-addons-expand {
+  animation: expandAddons 0.3s ease-out;
+}
+
+@keyframes expandAddons {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    max-height: 200px;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile-specific cart styles */
+@media (max-width: 768px) {
+  .cart-item-card {
+    margin-bottom: 1.5rem;
+  }
+  
+  .cart-hero-image {
+    height: 200px;
+  }
+  
+  .cart-action-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .cart-action-button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Desktop cart enhancements */
+@media (min-width: 769px) {
+  .cart-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .cart-hero-image {
+    height: 180px;
+  }
+}
+/* ===== CHECKOUT PAGE RESPONSIVE STYLES ===== */
+
+/* Full screen checkout container - Updated for native scrolling */
+.checkout-page-container {
+  overflow-x: hidden !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Ensure body doesn't have horizontal scroll when checkout is open */
+body:has(.checkout-page-container) {
+  overflow-x: hidden !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+}
+
+/* Touch-friendly elements */
+.touch-friendly {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+/* Checkout header with full width */
+.checkout-header {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  width: 100vw !important;
+  max-width: 100vw !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+/* Checkout page specific styles */
+.checkout-container {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+.checkout-form-section {
+  margin-bottom: 1.5rem;
+}
+
+.checkout-grid {
+  display: grid;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Mobile-first responsive grid */
+@media (max-width: 1023px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Desktop layout */
+@media (min-width: 1024px) {
+  .checkout-grid {
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+  }
+}
+
+/* Checkout form responsive styles */
+.checkout-form-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.checkout-form-grid-2 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .checkout-form-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.checkout-form-full {
+  grid-column: 1 / -1;
+}
+
+/* Order summary sticky positioning */
+.checkout-order-summary {
+  position: sticky;
+  top: 8rem;
+  height: fit-content;
+}
+
+@media (max-width: 1023px) {
+  .checkout-order-summary {
+    position: static;
+  }
+}
+
+/* Service item in checkout */
+.checkout-service-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+}
+
+.checkout-service-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.checkout-service-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.checkout-service-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  margin-bottom: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.checkout-service-category {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.checkout-service-price {
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* WhatsApp contact buttons */
+.checkout-whatsapp-section {
+  margin-top: 1.5rem;
+}
+
+.checkout-whatsapp-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem;
+  border: 1px solid;
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.checkout-whatsapp-vendor {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.checkout-whatsapp-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.checkout-whatsapp-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.checkout-whatsapp-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.checkout-whatsapp-category {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.checkout-whatsapp-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #25D366;
+  background: transparent;
+  color: #25D366;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  flex-shrink: 0;
+  min-height: 44px;
+}
+
+.checkout-whatsapp-button:hover {
+  background-color: #25D366;
+  color: white;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 640px) {
+  .checkout-whatsapp-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .checkout-whatsapp-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .checkout-service-item {
+    gap: 0.5rem;
+  }
+  
+  .checkout-service-image {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Bottom action button for all devices - Updated for native scrolling */
+.checkout-bottom-action {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  padding: 1rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid;
+  width: 100vw;
+  max-width: 100vw;
+  margin-bottom: 64px; /* Account for bottom navigation */
+}
+
+.checkout-bottom-button {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  min-height: 52px;
+}
+
+.checkout-bottom-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Ensure content doesn't get hidden behind sticky button */
+.checkout-content-padding {
+  padding-bottom: 6rem; /* Space for sticky button */
+}
+
+/* Desktop-only elements - Remove since we're using single button */
+@media (max-width: 1023px) {
+  .checkout-desktop-only {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .checkout-mobile-only {
+    display: none;
+  }
+  
+  /* Adjust button size for desktop */
+  .checkout-bottom-button {
+    font-size: 1rem;
+    padding: 0.875rem 1rem;
+  }
+}
+
+/* Form input enhancements */
+.checkout-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.checkout-input:focus {
+  outline: none;
+  border-width: 2px;
+}
+
+.checkout-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.checkout-textarea:focus {
+  outline: none;
+  border-width: 2px;
+}
+
+/* Loading spinner */
+.checkout-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Success state styles */
+.checkout-success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 10rem);
+  padding: 2rem;
+  text-align: center;
+}
+
+.checkout-success-icon {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.checkout-success-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.checkout-success-message {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  max-width: 400px;
+}
+
+/* Prevent horizontal scroll */
+.checkout-no-scroll * {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+/* Safe area support */
+.checkout-safe-area {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .checkout-whatsapp-button {
+    border-width: 2px;
+  }
+  
+  .checkout-input,
+  .checkout-textarea {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .checkout-spinner {
+    animation: none;
+  }
+  
+  .checkout-bottom-button,
+  .checkout-whatsapp-button,
+  .checkout-input,
+  .checkout-textarea {
+    transition: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .checkout-bottom-action,
+  .checkout-whatsapp-section {
+    display: none;
+  }
+}
+/* ===== FULL SCREEN CHECKOUT FIXES ===== */
+
+/* Ensure HTML and body use full width */
+html, body {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Root container full width */
+#root {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+/* App container full width */
+.App {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+/* Checkout specific full width overrides */
+.checkout-page-container {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  z-index: 50 !important;
+}
+
+/* Prevent any parent containers from constraining width */
+.checkout-page-container * {
+  box-sizing: border-box !important;
+}
+
+/* Ensure grid containers don't exceed viewport */
+.checkout-grid-container {
+  width: 100% !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+/* Mobile viewport fixes */
+@media (max-width: 768px) {
+  html, body, #root, .App {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  .checkout-page-container {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+}
+
+/* Prevent horizontal scroll on any element */
+* {
+  box-sizing: border-box;
+}
+
+*:not(.checkout-page-container) {
+  max-width: 100vw;
+}
+/* ===== FEEDBACK SECTION STYLES ===== */
+
+/* Feedback section animations */
+.feedback-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Star rating animations */
+.star-rating-button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.star-rating-button:hover {
+  transform: scale(1.1);
+}
+
+.star-rating-button:active {
+  transform: scale(0.95);
+}
+
+/* Feedback card hover effect */
+.feedback-card {
+  transition: all 0.3s ease;
+}
+
+.feedback-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Feedback textarea focus styles */
+.feedback-textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+  border-color: var(--primary-500, #ec4899);
+}
+
+/* Feedback button animations */
+.feedback-button {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feedback-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.feedback-button:active {
+  transform: translateY(0);
+}
+
+/* Success animation */
+.feedback-success {
+  animation: bounceIn 0.6s ease-out;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive feedback section */
+@media (max-width: 640px) {
+  .feedback-section {
+    margin-bottom: 1rem;
+  }
+  
+  .feedback-extra-buttons {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .feedback-extra-button {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+@media (min-width: 641px) {
+  .feedback-extra-buttons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Feedback background pattern */
+.feedback-background-pattern {
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+}
+
+/* Touch-friendly improvements for mobile */
+@media (max-width: 768px) {
+  .feedback-star-button {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 8px;
+  }
+  
+  .feedback-action-button {
+    min-height: 48px;
+    font-size: 16px;
+  }
+  
+  .feedback-extra-button {
+    min-height: 44px;
+  }
+}
+
+/* Smooth scroll behavior when feedback section comes into view */
+.feedback-section-container {
+  scroll-margin-top: 2rem;
+}
+
+/* Premium feel with subtle shadows */
+.feedback-premium-card {
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Gradient text for premium feel */
+.feedback-gradient-text {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Feedback section entrance animation on scroll */
+.feedback-section-enter {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feedback-section-enter.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Heart icon pulse animation */
+.feedback-heart-pulse {
+  animation: heartPulse 2s ease-in-out infinite;
+}
+
+@keyframes heartPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Feedback form validation styles */
+.feedback-input-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+.feedback-input-success {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+}
+/* ===== LENIS SMOOTH SCROLLING STYLES ===== */
+
+/* Ensure smooth scrolling is applied to the correct elements */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* Optimize scrolling performance */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent layout shifts during scroll */
+.scroll-container {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* ===== SCROLL ANIMATION STYLES ===== */
+
+/* Base styles for scroll-animated elements */
+.scroll-animate-section {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.smart-slider-section {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.category-item {
+  will-change: transform, opacity, scale;
+  backface-visibility: hidden;
+}
+
+/* Smooth transitions for scroll animations */
+.scroll-animate-section,
+.smart-slider-section,
+.category-item {
+  transition: none; /* Let GSAP handle all animations */
+}
+
+/* Optimize rendering for mobile */
+@media (max-width: 768px) {
+  .scroll-animate-section,
+  .smart-slider-section,
+  .category-item {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+
+/* Reduce paint and composite layers */
+.smart-slider-container {
+  contain: layout style paint;
+}
+
+/* Optimize images for scroll performance */
+.category-item img,
+.vendor-card img {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Prevent unnecessary repaints during scroll */
+.feedback-section-container {
+  contain: layout style paint;
+  will-change: transform, opacity;
+}
+
+/* ===== MOBILE SCROLL OPTIMIZATIONS ===== */
+
+/* Improve touch scrolling on mobile */
+@media (max-width: 768px) {
+  body {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+  }
+  
+  /* Optimize for mobile performance */
+  .scroll-animate-section,
+  .smart-slider-section {
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+  }
+  
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-animate-section,
+    .smart-slider-section,
+    .category-item {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+/* ===== SCROLL TRIGGER OPTIMIZATIONS ===== */
+
+/* Ensure ScrollTrigger elements don't cause layout shifts */
+[data-scroll-trigger] {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* Smooth entrance animations */
+.scroll-entrance {
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+  transition: none;
+}
+
+.scroll-entrance.animate {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ===== FLOATING ACTION BUTTON SCROLL BEHAVIOR ===== */
+
+/* Ensure FAB doesn't interfere with scroll performance */
+.floating-action-button {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* ===== HEADER SCROLL BEHAVIOR ===== */
+
+/* Optimize sticky header performance */
+.sticky-header {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* ===== SCROLL PERFORMANCE DEBUGGING ===== */
+
+/* Uncomment for debugging scroll performance */
+/*
+* {
+  outline: 1px solid red;
+}
+
+.scroll-animate-section {
+  background: rgba(255, 0, 0, 0.1);
+}
+
+.smart-slider-section {
+  background: rgba(0, 255, 0, 0.1);
+}
+*/
+
+/* ===== ACCESSIBILITY IMPROVEMENTS ===== */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .lenis {
+    scroll-behavior: auto !important;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== SCROLL SNAP POINTS (OPTIONAL) ===== */
+
+/* Uncomment if you want scroll snap behavior */
+/*
+.scroll-container {
+  scroll-snap-type: y proximity;
+}
+
+.scroll-animate-section {
+  scroll-snap-align: start;
+}
+*/
