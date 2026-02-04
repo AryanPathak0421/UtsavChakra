@@ -4,11 +4,13 @@ import Button from '../../../components/ui/Button';
 import Icon from '../../../components/ui/Icon';
 import { useTheme } from '../../../hooks/useTheme';
 import { useCart } from '../../../contexts/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const VendorCard = ({ vendor, layout = 'vertical' }) => {
   const { theme } = useTheme();
   const { addToCart, isInCart } = useCart();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const navigate = useNavigate();
 
   const handleWhatsAppContact = () => {
     const phoneNumber = vendor.phone || '919876543210';

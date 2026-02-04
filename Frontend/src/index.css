@@ -43,9 +43,54 @@ html, body {
   height: auto !important;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Visual-first typography - discourage large headings */
+h1, h2, h3 {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Mobile typography */
+@media (max-width: 768px) {
+  h1, h2, h3 {
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+/* Desktop typography */
+@media (min-width: 769px) {
+  h1, h2, h3 {
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+/* Override any large heading styles */
+.text-3xl, .text-2xl, .text-xl {
+  font-size: 16px !important;
+  font-weight: 500 !important;
+}
+
+@media (max-width: 768px) {
+  .text-3xl, .text-2xl, .text-xl {
+    font-size: 14px !important;
+  }
+}
+
+/* Professional body text */
+body {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
 }
 
 button {
@@ -677,6 +722,7 @@ html {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   width: 100vw;
   position: fixed;
   top: 0;
@@ -684,6 +730,24 @@ html {
   z-index: 50;
   overflow: hidden;
   background-color: inherit;
+  /* Disable page scrolling completely */
+  overscroll-behavior: none;
+  touch-action: pan-y; /* Allow vertical scrolling only within chat messages */
+}
+
+/* Disable scrolling on body when chat is active */
+body:has(.chat-container),
+body.chat-active {
+  overflow: hidden !important;
+  height: 100vh !important;
+  position: fixed !important;
+  width: 100% !important;
+}
+
+html:has(.chat-container),
+html:has(.chat-active) {
+  overflow: hidden !important;
+  height: 100vh !important;
 }
 
 /* Fixed Chat Header */
@@ -806,6 +870,8 @@ html {
   margin-top: 64px; /* Chat header height */
   margin-bottom: 80px; /* Input area height */
   position: relative;
+  /* Ensure this container takes up the remaining space */
+  min-height: 0;
 }
 
 .chat-messages-list {
@@ -817,6 +883,14 @@ html {
   -webkit-overflow-scrolling: touch;
   /* Enable native scrolling for chat messages */
   overscroll-behavior: contain;
+  /* Ensure smooth scrolling on mobile */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide scrollbar for WebKit browsers */
+.chat-messages-list::-webkit-scrollbar {
+  display: none;
 }
 
 /* Message Wrappers */
@@ -926,16 +1000,18 @@ html {
 /* Fixed Input Area */
 .chat-input-container {
   position: fixed;
-  bottom: 64px; /* Above bottom nav */
+  bottom: 0; /* Position at bottom of viewport, not above bottom nav */
   left: 0;
   right: 0;
   z-index: 60;
   border-top: 1px solid;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  height: 80px;
+  min-height: 80px;
   display: flex;
   align-items: center;
+  /* Ensure input area doesn't interfere with page scrolling */
+  overscroll-behavior: none;
 }
 
 .chat-input-wrapper {
@@ -965,6 +1041,15 @@ html {
   transition: all 0.2s ease;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  /* Prevent textarea from affecting page scroll */
+  overscroll-behavior: contain;
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chat-textarea::-webkit-scrollbar {
+  display: none;
 }
 
 .chat-textarea:focus {
@@ -1004,12 +1089,14 @@ html {
   
   .chat-messages-container {
     margin-top: 60px;
-    margin-bottom: 140px; /* More space for mobile keyboard */
+    margin-bottom: 80px; /* Space for input area */
   }
   
   .chat-input-container {
-    bottom: 64px;
-    height: 76px;
+    bottom: 0;
+    min-height: 76px;
+    /* Handle mobile keyboard */
+    padding-bottom: env(safe-area-inset-bottom);
   }
   
   .chat-message-bubble {
@@ -1028,6 +1115,12 @@ html {
   .chat-header-content {
     padding: 6px 12px;
   }
+  
+  /* Ensure proper viewport height on mobile */
+  .chat-container {
+    height: 100vh;
+    height: 100dvh;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1042,6 +1135,7 @@ html {
   
   .chat-messages-container {
     margin-top: 56px;
+    margin-bottom: 76px; /* Space for input area */
   }
   
   .chat-messages-list {
@@ -1054,7 +1148,8 @@ html {
   }
   
   .chat-input-container {
-    height: 72px;
+    min-height: 72px;
+    bottom: 0;
   }
   
   .chat-message-bubble {
@@ -1106,7 +1201,15 @@ html {
   }
   
   .chat-messages-container {
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: 0; /* Remove extra padding since input is at bottom */
+  }
+  
+  /* Handle virtual keyboard on mobile */
+  @supports (-webkit-touch-callout: none) {
+    .chat-container {
+      height: 100vh;
+      height: -webkit-fill-available;
+    }
   }
 }
 
@@ -1383,7 +1486,535 @@ body:has(.checkout-page-container) {
   right: 0 !important;
 }
 
-/* Checkout page specific styles */
+/* ===== ADVERTISEMENT SLIDER STYLES ===== */
+
+/* Advertisement container */
+.advertisement-slider {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.advertisement-slider:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Advertisement image transitions */
+.ad-image {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.ad-image-fade-in {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.ad-image-fade-out {
+  opacity: 0;
+  transform: translateX(-10px) scale(0.98);
+}
+
+/* Advertisement overlay elements */
+.ad-sponsor-tag {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.ad-caption {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+/* Dot indicators */
+.ad-dot-indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ad-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.ad-dot:focus {
+  outline: 2px solid rgba(236, 72, 153, 0.5);
+  outline-offset: 2px;
+}
+
+.ad-dot-active {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.ad-dot-inactive {
+  transform: scale(1);
+  opacity: 0.6;
+}
+
+.ad-dot:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+/* Touch interaction feedback */
+.advertisement-slider:active {
+  transform: scale(0.995);
+}
+
+/* Responsive advertisement heights */
+.ad-height-mobile {
+  height: 160px; /* 40 * 4 */
+}
+
+.ad-height-tablet {
+  height: 176px; /* 44 * 4 */
+}
+
+.ad-height-desktop {
+  height: 192px; /* 48 * 4 */
+}
+
+@media (min-width: 640px) {
+  .ad-height-mobile {
+    height: 176px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ad-height-mobile {
+    height: 192px;
+  }
+}
+
+/* Advertisement loading states */
+.ad-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: adShimmer 2s infinite;
+}
+
+@keyframes adShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Smooth slide transitions */
+.ad-slide-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.ad-slide-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease-out;
+}
+
+.ad-slide-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.ad-slide-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: all 0.5s ease-in;
+}
+
+/* Performance optimizations for ads */
+.ad-gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* Accessibility improvements */
+.ad-screen-reader-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Advertisement section spacing */
+.ad-section-spacing {
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .ad-section-spacing {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Prevent layout shift during ad transitions */
+.ad-container-stable {
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 640px) {
+  .ad-container-stable {
+    min-height: 176px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ad-container-stable {
+    min-height: 192px;
+  }
+}
+
+/* Touch-friendly dot indicators */
+@media (max-width: 768px) {
+  .ad-dot {
+    width: 10px;
+    height: 10px;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .ad-dot::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .ad-image,
+  .ad-dot,
+  .advertisement-slider {
+    transition: none;
+    animation: none;
+  }
+  
+  .ad-slide-enter-active,
+  .ad-slide-exit-active {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .ad-sponsor-tag {
+    border: 1px solid currentColor;
+    background-color: white;
+    color: black;
+  }
+  
+  .ad-dot {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Professional typography - no large headings */
+.visual-first-typography {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+@media (min-width: 768px) {
+  .visual-first-typography {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}
+
+/* Section indicators - replace headings with visual dots */
+.section-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.section-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.section-label {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Premium image containers */
+.premium-image-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.premium-image-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.premium-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.premium-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+}
+
+.premium-caption {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  color: white;
+  font-size: 14px;
+  font-weight: 300;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Visual cards - replace text-heavy sections */
+.visual-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.visual-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.visual-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+.visual-card-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+}
+
+.visual-card-subtitle {
+  font-size: 14px;
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+/* Professional color palette */
+.color-primary-soft { background-color: #fdf2f8; }
+.color-primary-medium { background-color: #f3e8ff; }
+.color-accent-soft { background-color: #fef3c7; }
+.color-neutral-soft { background-color: #f9fafb; }
+
+/* Responsive image heights */
+.hero-image-mobile { height: 192px; } /* 48 * 4 */
+.hero-image-tablet { height: 224px; } /* 56 * 4 */
+.hero-image-desktop { height: 256px; } /* 64 * 4 */
+
+@media (min-width: 640px) {
+  .hero-image-mobile { height: 224px; }
+}
+
+@media (min-width: 1024px) {
+  .hero-image-mobile { height: 256px; }
+}
+
+/* Subtle animations for professional feel */
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scale-in {
+  animation: scaleIn 0.4s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Professional button styles */
+.professional-button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.professional-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.professional-button:active {
+  transform: translateY(0);
+}
+
+/* Clean spacing system */
+.space-xs { margin-bottom: 0.5rem; }
+.space-sm { margin-bottom: 0.75rem; }
+.space-md { margin-bottom: 1rem; }
+.space-lg { margin-bottom: 1.5rem; }
+.space-xl { margin-bottom: 2rem; }
+
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+  .mobile-px-4 { padding-left: 1rem; padding-right: 1rem; }
+  .mobile-py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+  .mobile-text-sm { font-size: 14px; }
+  .mobile-rounded-lg { border-radius: 8px; }
+}
+
+/* Accessibility improvements */
+.focus-ring:focus {
+  outline: 2px solid #ec4899;
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Performance optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+}
+
+/* Professional loading states */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Clean form styles */
+.professional-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.professional-input:focus {
+  outline: none;
+  border-color: #ec4899;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+}
+
+/* Grid layouts for consistent spacing */
+.service-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 768px) {
+  .service-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .service-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Professional shadows */
+.shadow-soft { box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06); }
+.shadow-medium { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07); }
+.shadow-strong { box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); }
+
+/* Consistent border radius */
+.rounded-soft { border-radius: 6px; }
+.rounded-medium { border-radius: 8px; }
+.rounded-strong { border-radius: 12px; }
+.rounded-extra { border-radius: 16px; }
 .checkout-container {
   overflow-x: hidden;
   width: 100%;
@@ -2238,3 +2869,891 @@ html.lenis {
   scroll-snap-align: start;
 }
 */
+/* Hide bottom navigation when chat is active */
+body:has(.chat-container) .bottom-nav,
+body.chat-active .bottom-nav {
+  display: none !important;
+}
+
+/* Ensure chat container covers the entire viewport */
+.chat-container {
+  z-index: 9999; /* Higher than bottom nav */
+}
+/* Welcome Page Styles */
+.welcome-container {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.welcome-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    #fdf2f8 0%, 
+    #fce7f3 25%, 
+    #fed7aa 50%, 
+    #fbbf24 75%, 
+    #f59e0b 100%
+  );
+  z-index: -2;
+}
+
+.welcome-gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+  z-index: -1;
+}
+
+.welcome-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.welcome-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #f472b6, #fb7185);
+  border-radius: 50%;
+  animation: welcomeFloat 4s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+@keyframes welcomeFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 1;
+  }
+}
+
+.welcome-content {
+  position: relative;
+  z-index: 1;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.welcome-content-loaded {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Logo Section */
+.welcome-logo-section {
+  margin-bottom: 40px;
+  animation: welcomeFadeInUp 1s ease-out 0.2s both;
+}
+
+.welcome-logo {
+  margin-bottom: 16px;
+}
+
+.welcome-logo-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 20px 40px rgba(244, 114, 182, 0.3);
+  animation: welcomePulse 2s ease-in-out infinite;
+}
+
+.welcome-logo-text {
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-brand-name {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.welcome-tagline {
+  font-size: 16px;
+  margin: 0;
+  opacity: 0.8;
+}
+
+@keyframes welcomePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 20px 40px rgba(244, 114, 182, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 25px 50px rgba(244, 114, 182, 0.4);
+  }
+}
+
+/* Welcome Message */
+.welcome-message-section {
+  margin-bottom: 48px;
+  animation: welcomeFadeInUp 1s ease-out 0.4s both;
+}
+
+.welcome-heading,
+.welcome-heading-accent {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.welcome-heading-accent {
+  margin-top: 4px;
+}
+
+/* CTA Buttons */
+.welcome-cta-section {
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: welcomeFadeInUp 1s ease-out 0.6s both;
+}
+
+.welcome-cta-button {
+  width: 100%;
+  height: 56px;
+  border-radius: 28px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.welcome-cta-button:hover::before {
+  left: 100%;
+}
+
+.welcome-cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(244, 114, 182, 0.4);
+}
+
+.welcome-cta-button:active {
+  transform: translateY(0);
+}
+
+.welcome-button-text {
+  position: relative;
+  z-index: 1;
+}
+
+/* Social Login Section */
+.welcome-social-section {
+  animation: welcomeFadeInUp 1s ease-out 0.8s both;
+}
+
+.welcome-divider {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.welcome-divider-line {
+  flex: 1;
+  height: 1px;
+}
+
+.welcome-divider-text {
+  padding: 0 16px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.welcome-social-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.welcome-social-button {
+  flex: 1;
+  height: 48px;
+  border: 1px solid;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.welcome-social-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.welcome-social-button:active {
+  transform: translateY(0);
+}
+
+/* Decorative Elements */
+.welcome-decorative-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.welcome-mandala {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  opacity: 0.1;
+}
+
+.welcome-mandala-1 {
+  top: 10%;
+  right: -50px;
+  animation: welcomeRotate 20s linear infinite;
+}
+
+.welcome-mandala-2 {
+  bottom: 10%;
+  left: -50px;
+  animation: welcomeRotate 25s linear infinite reverse;
+}
+
+.welcome-mandala-ring {
+  position: absolute;
+  border: 2px solid;
+  border-radius: 50%;
+  animation: welcomePulseRing 3s ease-in-out infinite;
+}
+
+.welcome-mandala-ring:first-child {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.welcome-mandala-ring:last-child {
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+  animation-delay: 1.5s;
+}
+
+@keyframes welcomeRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes welcomePulseRing {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.2;
+  }
+}
+
+@keyframes welcomeFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .welcome-container {
+    padding: 16px;
+  }
+  
+  .welcome-content {
+    max-width: 320px;
+  }
+  
+  .welcome-logo-icon {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .welcome-logo-text {
+    font-size: 28px;
+  }
+  
+  .welcome-brand-name {
+    font-size: 28px;
+  }
+  
+  .welcome-heading,
+  .welcome-heading-accent {
+    font-size: 24px;
+  }
+  
+  .welcome-cta-button {
+    height: 52px;
+    font-size: 15px;
+  }
+  
+  .welcome-social-buttons {
+    flex-direction: column;
+  }
+  
+  .welcome-social-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-content {
+    max-width: 280px;
+  }
+  
+  .welcome-logo-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .welcome-logo-text {
+    font-size: 24px;
+  }
+  
+  .welcome-brand-name {
+    font-size: 24px;
+  }
+  
+  .welcome-heading,
+  .welcome-heading-accent {
+    font-size: 20px;
+  }
+  
+  .welcome-cta-button {
+    height: 48px;
+    font-size: 14px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .welcome-background {
+    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+  }
+  
+  .welcome-particle {
+    background: #000000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .welcome-content {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .welcome-logo-section,
+  .welcome-message-section,
+  .welcome-cta-section,
+  .welcome-social-section {
+    animation: none;
+  }
+  
+  .welcome-particle,
+  .welcome-mandala-1,
+  .welcome-mandala-2,
+  .welcome-mandala-ring {
+    animation: none;
+  }
+  
+  .welcome-logo-icon {
+    animation: none;
+  }
+}
+/* Vendor Categories Page Styles */
+.vendor-category-card {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.vendor-category-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.vendor-category-card:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Ensure smooth scrolling for vendor categories */
+.vendor-categories-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile optimizations for vendor categories */
+@media (max-width: 768px) {
+  .vendor-category-card {
+    margin-bottom: 12px;
+  }
+  
+  .vendor-category-card:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Prevent horizontal scrolling */
+.vendor-categories-container {
+  overflow-x: hidden;
+}
+
+/* Ensure images load smoothly */
+.vendor-category-image {
+  transition: transform 0.2s ease;
+}
+
+.vendor-category-card:hover .vendor-category-image {
+  transform: scale(1.05);
+}
+
+/* Loading state for images */
+.vendor-category-image img {
+  transition: opacity 0.3s ease;
+}
+
+.vendor-category-image img[src=""] {
+  opacity: 0;
+}
+
+/* Accessibility improvements */
+.vendor-category-card:focus {
+  outline: 2px solid #f472b6;
+  outline-offset: 2px;
+}
+
+/* Ensure proper spacing on different screen sizes */
+@media (max-width: 480px) {
+  .vendor-categories-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .vendor-categories-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+/* Decorative header image for vendor categories */
+.vendor-header-image {
+  transition: all 0.3s ease;
+  border: 2px solid rgba(244, 114, 182, 0.2);
+}
+
+.vendor-header-image:hover {
+  transform: scale(1.05);
+  border-color: rgba(244, 114, 182, 0.4);
+  box-shadow: 0 4px 12px rgba(244, 114, 182, 0.3);
+}
+
+/* Add a subtle glow effect */
+.vendor-header-image img {
+  transition: all 0.3s ease;
+}
+
+.vendor-header-image:hover img {
+  filter: brightness(1.1) saturate(1.1);
+}
+/* Visual-First Design System */
+
+/* Subtle headings - no bold fonts */
+.page-title {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 400; /* normal weight */
+  color: inherit;
+}
+
+.section-title {
+  font-size: 1rem; /* text-base */
+  font-weight: 400; /* normal weight */
+  color: inherit;
+}
+
+.card-title {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 400; /* normal weight */
+  color: inherit;
+}
+
+/* Visual elements take precedence */
+.visual-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.visual-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.visual-icon:hover {
+  transform: scale(1.05);
+}
+
+/* Clean, minimal cards */
+.minimal-card {
+  border-radius: 1rem;
+  padding: 1rem;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.minimal-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Remove bold fonts globally for wedding app */
+.wedding-app h1,
+.wedding-app h2,
+.wedding-app h3,
+.wedding-app h4,
+.wedding-app h5,
+.wedding-app h6 {
+  font-weight: 400 !important;
+}
+
+/* Elegant typography */
+.elegant-text {
+  font-weight: 300;
+  letter-spacing: 0.025em;
+}
+
+.subtle-label {
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Visual-first layout helpers */
+.visual-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.visual-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Smooth interactions */
+.smooth-interaction {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.smooth-interaction:hover {
+  transform: translateY(-1px);
+}
+
+.smooth-interaction:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Premium wedding app feel */
+.premium-surface {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile-first responsive helpers */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1rem;
+  }
+  
+  .section-title {
+    font-size: 0.875rem;
+  }
+  
+  .visual-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .minimal-card {
+    padding: 0.75rem;
+  }
+}
+
+/* Accessibility improvements for visual-first design */
+.visual-element:focus {
+  outline: 2px solid #f472b6;
+  outline-offset: 2px;
+}
+
+/* Ensure images are always optimized */
+.wedding-image {
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.wedding-image:hover {
+  transform: scale(1.02);
+}
+
+/* Clean spacing system */
+.space-y-minimal > * + * {
+  margin-top: 0.5rem;
+}
+
+.space-y-comfortable > * + * {
+  margin-top: 1rem;
+}
+
+.space-y-generous > * + * {
+  margin-top: 1.5rem;
+}
+/* Line clamp utilities for text truncation */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Hide scrollbar utilities */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Safe area utilities for devices with notches */
+.h-safe-area-inset-bottom {
+  height: env(safe-area-inset-bottom);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+/* Hamburger Menu Scrolling Fix */
+.hamburger-menu-panel {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.hamburger-menu-content {
+  min-height: 100%;
+}
+
+/* Ensure proper scrolling on mobile devices */
+@media (max-width: 768px) {
+  .hamburger-menu-panel {
+    overscroll-behavior: contain;
+  }
+}
+
+/* Fix for iOS Safari scrolling issues */
+@supports (-webkit-touch-callout: none) {
+  .hamburger-menu-panel {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll;
+  }
+}
+/* Remove default button styling that might cause black backgrounds */
+button {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Ensure no default button styles interfere */
+.vendor-icon-button {
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+/* Horizontal scrolling categories */
+.category-scroll-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Responsive category items */
+@media (max-width: 640px) {
+  .category-item {
+    min-width: 70px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .category-item {
+    min-width: 80px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .category-item {
+    min-width: 90px;
+  }
+}
+
+/* Smooth scroll snap for categories */
+.category-scroll-container {
+  scroll-snap-type: x mandatory;
+}
+
+.category-item {
+  scroll-snap-align: start;
+}
+/* Banner styling */
+.banner-container {
+  transition: all 0.2s ease-in-out;
+}
+
+.banner-container:hover {
+  transform: translateY(-1px);
+}
+
+/* Banner responsive design */
+@media (max-width: 640px) {
+  .banner-container {
+    margin: 0 16px;
+  }
+}
+
+@media (min-width: 641px) {
+  .banner-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .banner-container {
+    max-width: 800px;
+  }
+}
+
+/* Banner image optimization */
+.banner-image {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Smooth carousel transitions */
+.banner-carousel-image {
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -19,6 +19,7 @@ const PlanningDetails = () => {
     eventTypes: [],
     weddingDate: '',
     city: '',
+    aadharNumber: '',
     budgetRange: [100000, 1000000], // Default range ₹1L - ₹10L
     servicePreferences: {}
   });
@@ -364,6 +365,41 @@ const PlanningDetails = () => {
                 color: theme.semantic.text.primary
               }}
             />
+          </div>
+
+          <div>
+            <label 
+              className="block text-sm font-medium mb-2"
+              style={{ color: theme.semantic.text.primary }}
+            >
+              Aadhar Card Number
+            </label>
+            <input
+              type="text"
+              value={planningData.aadharNumber}
+              onChange={(e) => {
+                // Format Aadhar number with spaces (XXXX XXXX XXXX)
+                const value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+                const formattedValue = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+                if (value.length <= 12) {
+                  setPlanningData(prev => ({ ...prev, aadharNumber: formattedValue }));
+                }
+              }}
+              placeholder="1234 5678 9012"
+              maxLength="14" // 12 digits + 2 spaces
+              className="w-full p-3 rounded-lg border"
+              style={{
+                backgroundColor: theme.semantic.card.background,
+                borderColor: theme.semantic.border.light,
+                color: theme.semantic.text.primary
+              }}
+            />
+            <p 
+              className="text-xs mt-1"
+              style={{ color: theme.semantic.text.secondary }}
+            >
+              Enter your 12-digit Aadhar number for identity verification
+            </p>
           </div>
         </div>
       </div>

@@ -246,7 +246,7 @@ const Account = () => {
             {/* User Details */}
             <div className="flex-1 min-w-0">
               <h1 
-                className="text-lg font-bold mb-1"
+                className="text-lg mb-1"
                 style={{ color: theme.semantic.text.primary }}
               >
                 {userData.name}
@@ -287,12 +287,18 @@ const Account = () => {
 
       {/* Budget & Wedding Summary */}
       <div className="px-4 py-2">
-        <h2 
-          className="text-lg font-bold mb-4"
-          style={{ color: theme.semantic.text.primary }}
-        >
-          Budget & Wedding Summary
-        </h2>
+        <div className="flex items-center space-x-2 mb-4">
+          <div 
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: theme.colors.primary[500] }}
+          />
+          <span 
+            className="text-base"
+            style={{ color: theme.semantic.text.primary }}
+          >
+            Budget & Wedding Summary
+          </span>
+        </div>
         
         {/* Wedding Budget Overview */}
         {userData.hasSetBudget ? (
@@ -487,12 +493,18 @@ const Account = () => {
 
       {/* My Activity Section */}
       <div className="px-4 py-6">
-        <h2 
-          className="text-lg font-bold mb-4"
-          style={{ color: theme.semantic.text.primary }}
-        >
-          My Wedding Tools
-        </h2>
+        <div className="flex items-center space-x-2 mb-4">
+          <div 
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: theme.colors.accent[500] }}
+          />
+          <span 
+            className="text-base"
+            style={{ color: theme.semantic.text.primary }}
+          >
+            My Wedding Tools
+          </span>
+        </div>
         
         <div className="space-y-3">
           {/* My Cart */}
@@ -699,12 +711,18 @@ const Account = () => {
 
       {/* Payments & Budget Management */}
       <div className="px-4 py-6">
-        <h2 
-          className="text-lg font-bold mb-4"
-          style={{ color: theme.semantic.text.primary }}
-        >
-          Payments & Spending
-        </h2>
+        <div className="flex items-center space-x-2 mb-4">
+          <div 
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: theme.colors.secondary[500] }}
+          />
+          <span 
+            className="text-base"
+            style={{ color: theme.semantic.text.primary }}
+          >
+            Payments & Spending
+          </span>
+        </div>
         
         <div className="space-y-3">
           {/* My Payments */}
@@ -847,12 +865,18 @@ const Account = () => {
 
       {/* Account & Settings */}
       <div className="px-4 py-6">
-        <h2 
-          className="text-lg font-bold mb-4"
-          style={{ color: theme.semantic.text.primary }}
-        >
-          Account & Settings
-        </h2>
+        <div className="flex items-center space-x-2 mb-4">
+          <div 
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: theme.colors.primary[400] }}
+          />
+          <span 
+            className="text-base"
+            style={{ color: theme.semantic.text.primary }}
+          >
+            Account & Settings
+          </span>
+        </div>
         
         <div className="space-y-3">
           {/* Edit Profile */}

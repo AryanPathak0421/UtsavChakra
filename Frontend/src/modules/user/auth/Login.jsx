@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Card from '../../../components/ui/Card';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
+import Icon from '../../../components/ui/Icon';
 import { useTheme } from '../../../hooks/useTheme';
 import { useAuth } from '../../../contexts/AuthContext';
 
@@ -35,8 +36,8 @@ const Login = () => {
       const result = await login(formData.email, formData.password);
       
       if (result.success) {
-        // Redirect to Account page after successful login
-        navigate('/user/account');
+        // Redirect to user home after successful login
+        navigate('/user/home');
       } else {
         setError(result.error);
       }
@@ -62,8 +63,14 @@ const Login = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           <div className="absolute bottom-3 left-4">
-            <span className="text-white font-medium">Welcome</span>
+            <span className="text-white font-medium">Welcome Back</span>
           </div>
+          <button
+            onClick={() => navigate('/')}
+            className="absolute top-3 left-3 w-8 h-8 rounded-full bg-black/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/30 transition-colors"
+          >
+            <Icon name="chevronLeft" size="sm" />
+          </button>
         </div>
 
         <Card.Content className="pt-6">
@@ -111,7 +118,7 @@ const Login = () => {
             </Button>
           </form>
 
-          <div className="mt-6 text-center space-y-3">
+          <div className="mt-6 text-center">
             <p style={{ color: theme.semantic.text.secondary }}>
               Don't have an account?{' '}
               <Link 
@@ -126,18 +133,6 @@ const Login = () => {
                 Sign up
               </Link>
             </p>
-            
-            <Link 
-              to="/user/home" 
-              className="block text-sm hover:underline"
-              style={{ 
-                color: theme.semantic.text.tertiary,
-              }}
-              onMouseEnter={(e) => e.target.style.color = theme.semantic.text.secondary}
-              onMouseLeave={(e) => e.target.style.color = theme.semantic.text.tertiary}
-            >
-              Continue as guest
-            </Link>
           </div>
         </Card.Content>
       </Card>

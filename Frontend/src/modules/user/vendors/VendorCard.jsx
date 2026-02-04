@@ -2,9 +2,11 @@ import Card from '../../../components/ui/Card';
 import Button from '../../../components/ui/Button';
 import Icon from '../../../components/ui/Icon';
 import { useTheme } from '../../../hooks/useTheme';
+import { useNavigate } from 'react-router-dom';
 
 const VendorCard = ({ vendor, layout = 'vertical' }) => {
   const { theme } = useTheme();
+  const navigate = useNavigate();
 
   const handleWhatsAppContact = () => {
     // Format phone number and message for WhatsApp

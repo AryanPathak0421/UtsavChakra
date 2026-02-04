@@ -29,17 +29,19 @@ export const vendors = [
   },
   {
     id: 3,
-    name: 'Moments Photography',
+    name: 'The Feeling Makers',
     category: 'photographers',
-    rating: 4.9,
-    reviews: 234,
-    location: 'Indore, Madhya Pradesh',
+    rating: 4.7,
+    reviews: 31,
+    location: 'Bhopal, Madhya Pradesh',
     price: '₹25,000 - ₹75,000',
     image: 'https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=400',
     verified: true,
-    services: ['wedding photography', 'candid photography'],
-    description: 'Candid & Cinematic Wedding Photography - Capturing your precious moments beautifully.',
-    phone: '919876543212'
+    services: ['wedding photography', 'candid photography', 'cinematic videography'],
+    description: 'Offering professional photography and videography services, The Feeling Makers is situated in Bhopal of Madhya Pradesh. The team of skillful individuals here have been continuously impressing clients with their artistry and excellence.',
+    phone: '919876543212',
+    experience: '2 years 9 months',
+    platform: 'WedMeGood'
   },
   {
     id: 4,

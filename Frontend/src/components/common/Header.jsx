@@ -1,16 +1,25 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
 import { useAuth } from '../../contexts/AuthContext';
 import Button from '../ui/Button';
 import CartIcon from './CartIcon';
 import HamburgerMenu from './HamburgerMenu';
+import Icon from '../ui/Icon';
 
 const Header = () => {
   const { theme, changeTheme, availableThemes, themeName } = useTheme();
   const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
+  
+  // Mock notification count - replace with actual data from context/API
+  const [notificationCount] = useState(3);
+
+  const handleNotificationsClick = () => {
+    navigate('/user/notifications');
+  };
 
   const headerStyles = {
     backgroundColor: theme.semantic.navigation.background,
@@ -51,6 +60,39 @@ const Header = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
+            {/* Notification Icon */}
+            {isAuthenticated && (
+              <button
+                onClick={handleNotificationsClick}
+                className="relative p-2 rounded-lg transition-colors"
+                style={{ 
+                  color: theme.semantic.text.secondary,
+                  backgroundColor: 'transparent'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.color = theme.semantic.text.primary;
+                  e.target.style.backgroundColor = theme.semantic.background.accent;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = theme.semantic.text.secondary;
+                  e.target.style.backgroundColor = 'transparent';
+                }}
+              >
+                <Icon name="bell" size="md" />
+                {/* Notification Badge */}
+                {notificationCount > 0 && (
+                  <div 
+                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: theme.colors.accent[500] }}
+                  >
+                    <span className="text-xs font-bold text-white">
+                      {notificationCount > 9 ? '9+' : notificationCount}
+                    </span>
+                  </div>
+                )}
+              </button>
+            )}
+            
             {/* Cart Icon */}
             <CartIcon />
             
@@ -138,6 +180,39 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-2">
+            {/* Notification Icon for Mobile */}
+            {isAuthenticated && (
+              <button
+                onClick={handleNotificationsClick}
+                className="relative p-2 rounded-lg transition-colors"
+                style={{ 
+                  color: theme.semantic.navigation.text,
+                  backgroundColor: 'transparent'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.color = theme.semantic.text.accent;
+                  e.target.style.backgroundColor = theme.semantic.navigation.backgroundHover;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = theme.semantic.navigation.text;
+                  e.target.style.backgroundColor = 'transparent';
+                }}
+              >
+                <Icon name="bell" size="sm" />
+                {/* Notification Badge */}
+                {notificationCount > 0 && (
+                  <div 
+                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: theme.colors.accent[500] }}
+                  >
+                    <span className="text-xs font-bold text-white">
+                      {notificationCount > 9 ? '9+' : notificationCount}
+                    </span>
+                  </div>
+                )}
+              </button>
+            )}
+            
             {/* Cart Icon for Mobile */}
             <CartIcon />
             

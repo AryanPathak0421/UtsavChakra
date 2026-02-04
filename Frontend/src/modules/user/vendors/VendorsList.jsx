@@ -24,6 +24,10 @@ const VendorsList = () => {
     const initializeAnimations = async () => {
       if (!lenis) return;
 
+      // Temporarily disable animations to test click functionality
+      console.log('Animations disabled for testing');
+      return;
+
       const [{ gsap }, { ScrollTrigger }] = await Promise.all([
         import('gsap'),
         import('gsap/ScrollTrigger')
@@ -166,11 +170,14 @@ const VendorsList = () => {
 
         {/* Responsive Vendors Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-24">
-          {sortedVendors.map((vendor) => (
-            <div key={vendor.id} className="vendor-list-card">
-              <VendorCard vendor={vendor} layout="responsive" />
-            </div>
-          ))}
+          {sortedVendors.map((vendor) => {
+            console.log('Rendering vendor:', vendor.id, vendor.name, vendor.category);
+            return (
+              <div key={vendor.id} className="vendor-list-card">
+                <VendorCard vendor={vendor} layout="responsive" />
+              </div>
+            );
+          })}
         </div>
 
         {/* Enhanced Empty State */}

@@ -3,10 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import Card from '../../../components/ui/Card';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
+import Icon from '../../../components/ui/Icon';
 import { useTheme } from '../../../hooks/useTheme';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const Signup = () => {
   const { theme } = useTheme();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -14,42 +17,42 @@ const Signup = () => {
     password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
 
-    // Mock signup - simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1200)); // Simulate network delay
+      // Mock signup - simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1200));
       
       // Mock validation - accept any valid inputs for demo
       if (formData.name && formData.email && formData.password) {
-        // Mock successful signup
-        console.log('Signup successful:', formData);
+        // Auto-login after successful signup
+        const result = await login(formData.email, formData.password);
         
-        // Store mock user data (in real app, this would come from API)
-        localStorage.setItem('user', JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          isAuthenticated: true
-        }));
-        
-        // Redirect to user home
-        navigate('/user/home');
+        if (result.success) {
+          // Redirect to user home after successful signup
+          navigate('/user/home');
+        } else {
+          setError('Account created but login failed. Please try logging in.');
+        }
       } else {
-        throw new Error('Please fill in all fields');
+        setError('Please fill in all fields');
       }
     } catch (error) {
-      console.error('Signup failed:', error.message);
-      // In a real app, you'd show error message to user
+      setError('Signup failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -70,11 +73,30 @@ const Signup = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           <div className="absolute bottom-3 left-4">
-            <span className="text-white font-medium">Join</span>
+            <span className="text-white font-medium">Join UtsavChakra</span>
           </div>
+          <button
+            onClick={() => navigate('/')}
+            className="absolute top-3 left-3 w-8 h-8 rounded-full bg-black/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/30 transition-colors"
+          >
+            <Icon name="chevronLeft" size="sm" />
+          </button>
         </div>
 
         <Card.Content className="pt-6">
+          {error && (
+            <div 
+              className="mb-4 p-3 rounded-lg text-sm"
+              style={{ 
+                backgroundColor: '#fee2e2',
+                color: '#dc2626',
+                border: '1px solid #fecaca'
+              }}
+            >
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <Input
               label="Full Name"
@@ -116,7 +138,7 @@ const Signup = () => {
             </Button>
           </form>
 
-          <div className="mt-6 text-center space-y-3">
+          <div className="mt-6 text-center">
             <p style={{ color: theme.semantic.text.secondary }}>
               Already have an account?{' '}
               <Link 
@@ -131,18 +153,6 @@ const Signup = () => {
                 Sign in
               </Link>
             </p>
-            
-            <Link 
-              to="/user/home" 
-              className="block text-sm hover:underline"
-              style={{ 
-                color: theme.semantic.text.tertiary,
-              }}
-              onMouseEnter={(e) => e.target.style.color = theme.semantic.text.secondary}
-              onMouseLeave={(e) => e.target.style.color = theme.semantic.text.tertiary}
-            >
-              Continue as guest
-            </Link>
           </div>
         </Card.Content>
       </Card>

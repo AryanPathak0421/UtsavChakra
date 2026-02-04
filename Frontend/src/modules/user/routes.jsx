@@ -5,6 +5,7 @@ import Login from './auth/Login';
 import Signup from './auth/Signup';
 import RequirementsForm from './requirements/RequirementsForm';
 import VendorsList from './vendors/VendorsList';
+import VendorDetail from './vendors/VendorDetail';
 import Header from '../../components/common/Header';
 import BottomNav from '../../components/common/BottomNav';
 

@@ -11,6 +11,7 @@ const BottomNav = () => {
     { path: '/user/home', label: 'Home', iconName: 'home' },
     { path: '/user/requirements', label: 'Plan', iconName: 'plan' },
     { path: '/user/vendors', label: 'Vendors', iconName: 'vendors' },
+    { path: '/user/news', label: 'News', iconName: 'envelope' },
     { 
       path: '/user/account', 
       label: 'Account', 

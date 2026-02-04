@@ -1,34 +1,25 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../hooks/useTheme';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
-  const { theme } = useTheme();
+  const location = useLocation();
 
-  // Show loading while checking auth state
+  // Show loading while checking authentication
   if (isLoading) {
     return (
-      <div 
-        className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: theme.semantic.background.primary }}
-      >
-        <div className="text-center">
-          <div 
-            className="animate-spin rounded-full h-8 w-8 border-2 border-t-transparent mx-auto mb-4"
-            style={{ borderColor: theme.colors.primary[500], borderTopColor: 'transparent' }}
-          ></div>
-          <p style={{ color: theme.semantic.text.secondary }}>Loading...</p>
-        </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
       </div>
     );
   }
 
-  // Redirect to login if not authenticated
+  // If not authenticated, redirect to welcome page
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
+  // If authenticated, render the protected component
   return children;
 };
 
