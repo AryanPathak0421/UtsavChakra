@@ -161,6 +161,10 @@ const navItems = [
 ];
 ```
 
+
+
+
+
 ### Compliance Rules
 - **Fixed Position**: Bottom nav remains fixed and visible
 - **Active State**: Account tab highlights when on account page
